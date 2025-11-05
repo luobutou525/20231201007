@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>百度贴吧导航 - 社区互动平台</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .title {
+            font-size: 4em;
+            margin-bottom: 20px;
+            font-weight: 800;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideIn 1s ease-out;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            animation: slideIn 1s ease-out 0.3s both;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 25px;
+            border-radius: 50px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .app-card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: popIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, #ff6b6b, #feca57);
+        }
+        
+        .app-card:nth-child(1) { animation-delay: 0.2s; }
+        .app-card:nth-child(2) { animation-delay: 0.4s; }
+        
+        .app-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .app-card:hover::before {
+            background: linear-gradient(90deg, #feca57, #ff6b6b);
+        }
+        
+        .app-icon {
+            font-size: 4.5em;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .app-card:hover .app-icon {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .app-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: #2d3436;
+        }
+        
+        .app-description {
+            margin-bottom: 35px;
+            color: #636e72;
+            font-size: 1.1em;
+            line-height: 1.7;
+        }
+        
+        .btn {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+            color: white;
+            padding: 16px 45px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.5);
+            background: linear-gradient(45deg, #ee5a6f, #ff6b6b);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 80px;
+            color: #666;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(20px, 20px);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 3em;
+            }
+            
+            .subtitle {
+                font-size: 1.1em;
+                padding: 12px 20px;
+            }
+            
+            .apps-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            
+            .app-card {
+                padding: 30px 20px;
+            }
+            
+            .app-icon {
+                font-size: 3.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="title">百度贴吧导航</h1>
+            <p class="subtitle">探索热门贴吧内容，管理个人社区身份，打造专属的互动体验</p>
+        </header>
+        
+        <div class="apps-grid">
+            <div class="app-card">
+                <div class="app-icon">📱</div>
+                <h2 class="app-title">贴吧浏览</h2>
+                <p class="app-description">发现热门话题和精选内容，浏览不同分类的贴吧帖子，参与社区讨论</p>
+                <a href="/pages/" class="btn">浏览贴吧</a>
+            </div>
+            
+            <div class="app-card">
+                <div class="app-icon">👤</div>
+                <h2 class="app-title">个人中心</h2>
+                <p class="app-description">管理个人资料，查看发帖记录，设置社区偏好，体验个性化服务</p>
+                <a href="/profile/" class="btn">我的中心</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 百度贴吧导航 - 社区互动平台</p>
+        </footer>
+    </div>
+</body>
+</html>

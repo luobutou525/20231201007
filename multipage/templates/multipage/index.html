@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>百度贴吧浏览 - 热门话题社区</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+                background: #f5f5f5;
+                min-height: 100vh;
+                color: #333;
+                line-height: 1.6;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            
+            header {
+                background: white;
+                padding: 25px 30px;
+                border-radius: 12px;
+                text-align: center;
+                margin-bottom: 25px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                border-left: 6px solid #ff6b6b;
+            }
+            
+            h1 {
+                color: #ff6b6b;
+                font-size: 2.2em;
+                margin-bottom: 12px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 15px;
+            }
+            
+            h1::before,
+            h1::after {
+                content: '🔥';
+                font-size: 1.5em;
+            }
+            
+            .nav-container {
+                background: white;
+                border-radius: 12px;
+                padding: 25px 30px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                margin-bottom: 25px;
+            }
+            
+            .nav-buttons {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .nav-button {
+                padding: 12px 28px;
+                font-size: 17px;
+                font-weight: 600;
+                color: white;
+                background: linear-gradient(45deg, #ff6b6b, #ee5a6f);
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .nav-button::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.2);
+                transform: translate(-50%, -50%);
+                transition: width 0.6s, height 0.6s;
+            }
+            
+            .nav-button:hover::before {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .nav-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+                background: linear-gradient(45deg, #ee5a6f, #ff6b6b);
+            }
+            
+            .nav-button.active {
+                background: linear-gradient(45deg, #48dbfb, #0abde3);
+                box-shadow: 0 4px 15px rgba(10, 189, 227, 0.3);
+            }
+            
+            .nav-button.active:hover {
+                background: linear-gradient(45deg, #0abde3, #48dbfb);
+            }
+            
+            .content-container {
+                background: white;
+                border-radius: 12px;
+                padding: 30px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                min-height: 400px;
+                transition: all 0.3s ease;
+            }
+            
+            #content {
+                animation: fadeIn 0.5s ease-in-out;
+            }
+            
+            .post-card {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+                transition: all 0.3s ease;
+                border-left: 4px solid transparent;
+            }
+            
+            .post-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                border-left: 4px solid #ff6b6b;
+            }
+            
+            .post-title {
+                font-size: 1.4em;
+                font-weight: 600;
+                color: #2d3436;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .post-content {
+                color: #636e72;
+                line-height: 1.7;
+                margin-bottom: 15px;
+            }
+            
+            .post-meta {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.9em;
+                color: #95a5a6;
+            }
+            
+            .post-author {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .post-stats {
+                display: flex;
+                gap: 20px;
+            }
+            
+            .post-stat {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            
+            .welcome-message {
+                text-align: center;
+                padding: 50px 20px;
+                color: #636e72;
+            }
+            
+            .welcome-message h2 {
+                color: #ff6b6b;
+                margin-bottom: 20px;
+                font-size: 2em;
+            }
+            
+            footer {
+                text-align: center;
+                margin-top: 40px;
+                padding: 20px;
+                color: #636e72;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .nav-buttons {
+                    flex-direction: column;
+                    align-items: center;
+                }
+                
+                .nav-button {
+                    width: 100%;
+                    max-width: 300px;
+                }
+                
+                h1 {
+                    font-size: 1.8em;
+                    flex-direction: column;
+                    gap: 8px;
+                }
+                
+                h1::before,
+                h1::after {
+                    font-size: 1.2em;
+                }
+                
+                .post-meta {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 10px;
+                }
+            }
+        </style>
+        <script>
+            // 页面状态管理
+            window.onpopstate = function(event) {
+                if (event.state) {
+                    console.log('加载历史状态:', event.state.section);
+                    showSection(event.state.section);
+                }
+            }
+
+            // 模拟的贴吧数据
+            const forumData = {
+                1: [
+                    {title: "【讨论】最近有什么好看的电影推荐？", content: "大家最近有看什么好看的电影吗？求推荐一些剧情好、演员演技在线的作品。", author: "电影爱好者", time: "10分钟前", views: 125, replies: 23},
+                    {title: "【分享】自制美食：超简单的家常菜教程", content: "今天给大家分享一道简单又好吃的家常菜，食材容易获取，新手也能轻松上手！", author: "美食达人", time: "2小时前", views: 356, replies: 45},
+                    {title: "【求助】电脑突然变慢怎么办？", content: "最近电脑运行速度明显下降，有什么优化建议吗？已经清理了垃圾文件但效果不明显。", author: "科技小白", time: "昨天", views: 89, replies: 17}
+                ],
+                2: [
+                    {title: "【讨论】2023年最值得入手的手机有哪些？", content: "想换手机，预算4000-6000，有什么推荐吗？主要看重拍照和续航。", author: "数码控", time: "30分钟前", views: 278, replies: 67},
+                    {title: "【开箱】新入手的平板电脑体验", content: "刚买了最新款的平板电脑，屏幕素质和性能都很满意，来分享一下使用感受。", author: "科技玩家", time: "5小时前", views: 542, replies: 89},
+                    {title: "【教程】如何提高手机电池续航？", content: "分享几个实用技巧，让你的手机电池更耐用，一天一充不是梦！", author: "数码专家", time: "3天前", views: 1245, replies: 156}
+                ],
+                3: [
+                    {title: "【讨论】年轻人应该如何理财？", content: "刚工作不久，想开始学习理财，有什么入门建议吗？", author: "理财新手", time: "1小时前", views: 678, replies: 98},
+                    {title: "【分享】我的副业月入过万经验", content: "在主业之外发展了副业，现在月收入稳定过万，分享一些心得和方法。", author: "斜杠青年", time: "昨天", views: 2341, replies: 342},
+                    {title: "【求助】如何平衡工作和生活？", content: "最近工作压力很大，感觉生活被工作占据，有什么好的建议吗？", author: "职场人", time: "3天前", views: 876, replies: 123}
+                ]
+            };
+
+            // 生成帖子HTML
+            function generatePostsHtml(posts) {
+                let html = '';
+                posts.forEach(post => {
+                    html += `
+                    <div class="post-card">
+                        <h3 class="post-title">📌 ${post.title}</h3>
+                        <p class="post-content">${post.content}</p>
+                        <div class="post-meta">
+                            <div class="post-author">
+                                <span>👤 ${post.author}</span>
+                                <span>${post.time}</span>
+                            </div>
+                            <div class="post-stats">
+                                <span class="post-stat">👁️ ${post.views}</span>
+                                <span class="post-stat">💬 ${post.replies}</span>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                });
+                return html;
+            }
+
+            // 显示指定内容区域
+            function showSection(section) {
+                const contentElement = document.querySelector('#content');
+                
+                // 添加淡出效果
+                contentElement.style.opacity = '0';
+                contentElement.style.transform = 'translateY(10px)';
+                
+                setTimeout(() => {
+                    // 使用模拟数据
+                    if (forumData[section]) {
+                        contentElement.innerHTML = generatePostsHtml(forumData[section]);
+                    } else {
+                        contentElement.innerHTML = '<p style="color: #e74c3c;">该分类暂无内容</p>';
+                    }
+                    
+                    // 添加淡入效果
+                    contentElement.style.opacity = '1';
+                    contentElement.style.transform = 'translateY(0)';
+                }, 300);
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // 为所有导航按钮添加点击事件
+                document.querySelectorAll('.nav-button').forEach(button => {
+                    button.onclick = function() {
+                        const section = this.dataset.section;
+                        
+                        // 添加当前状态到历史记录
+                        history.pushState({section: section}, "", `section${section}`);
+                        
+                        // 高亮当前按钮
+                        document.querySelectorAll('.nav-button').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        // 显示内容
+                        showSection(section);
+                    };
+                });
+                
+                // 为帖子卡片添加点击效果
+                document.addEventListener('click', function(e) {
+                    const postCard = e.target.closest('.post-card');
+                    if (postCard) {
+                        alert('帖子详情功能开发中...');
+                    }
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>百度贴吧 - 热门话题</h1>
+                <p>发现有趣内容，参与社区讨论</p>
+            </header>
+            
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <button class="nav-button" data-section="1">📝 生活休闲</button>
+                    <button class="nav-button" data-section="2">💻 数码科技</button>
+                    <button class="nav-button" data-section="3">💰 职场理财</button>
+                </div>
+            </div>
+            
+            <div class="content-container">
+                <div id="content">
+                    <div class="welcome-message">
+                        <h2>🎉 欢迎来到百度贴吧</h2>
+                        <p>选择上方分类开始浏览精彩内容</p>
+                    </div>
+                </div>
+            </div>
+            
+            <footer>
+                <p>&copy; 2023 百度贴吧浏览 - 社区互动平台</p>
+            </footer>
+        </div>
+    </body>
+</html>
